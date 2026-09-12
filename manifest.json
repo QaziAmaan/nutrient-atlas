@@ -1,0 +1,17 @@
+{
+  "name": "The Nutrient Atlas",
+  "short_name": "Nutrient Atlas",
+  "description": "A field guide to the vitamins, minerals, and herbs for stronger bones, skin, and muscles.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#EEF2E6",
+  "theme_color": "#C98A22",
+  "icons": [
+    { "src": "images/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "images/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "images/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "images/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

@@ -1,0 +1,1469 @@
+<title>The Nutrient Atlas</title>
+<meta name="description" content="A field guide to the vitamins, minerals, and herbs for stronger bones, skin, and muscles — with the everyday foods that carry them, and a full RDA reference by age.">
+<meta name="theme-color" content="#C98A22">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="images/icon-192.png">
+<link rel="apple-touch-icon" href="images/icon-apple-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Nutrient Atlas">
+<meta property="og:type" content="website">
+<meta property="og:title" content="The Nutrient Atlas">
+<meta property="og:description" content="A colorful field guide to vitamins, minerals, and herbs for stronger bones, skin, and muscles.">
+<meta property="og:image" content="images/icon-512.png">
+<meta name="twitter:card" content="summary">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,900&family=Manrope:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#EEF2E6;
+    --paper-dim:#E4E9D9;
+    --ink:#1D2B26;
+    --ink-soft:#4C5C55;
+    --line: rgba(29,43,38,0.14);
+    --gold:#C98A22;
+    --gold-soft:#F1DBA6;
+    --card:#FBFBF4;
+
+    --bone-a:#B8862E;
+    --bone-b:#F4E7C7;
+    --bone-tint:#FAF3E1;
+
+    --skin-a:#E2517A;
+    --skin-b:#FBD7D0;
+    --skin-tint:#FCEDEB;
+
+    --musc-a:#C9502B;
+    --musc-b:#F6D9B8;
+    --musc-tint:#FBEDDD;
+
+    --herb-bg:#241A34;
+    --herb-bg2:#332346;
+    --herb-a:#B9A6E0;
+    --herb-b:#F0D999;
+    --herb-ink:#F1ECE4;
+    --herb-ink-soft:#C9BFDA;
+
+    --radius:20px;
+    --maxw:1180px;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important;}
+  }
+
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Manrope', system-ui, sans-serif;
+    -webkit-font-smoothing:antialiased;
+    padding-inline:0;
+    overflow-x:hidden;
+  }
+
+  h1,h2,h3,.display{
+    font-family:'Fraunces', Georgia, serif;
+    text-wrap:balance;
+    margin:0;
+    letter-spacing:-0.01em;
+  }
+
+  .mono{
+    font-family:'Space Mono', ui-monospace, monospace;
+  }
+
+  a{color:inherit;}
+
+  .wrap{
+    max-width:var(--maxw);
+    margin:0 auto;
+    padding-inline:clamp(16px, 5vw, 48px);
+  }
+
+  /* ---------- NAV ---------- */
+  #topnav{
+    position:sticky; top:0; z-index:50;
+    background:rgba(238,242,230,0.86);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-inner{
+    max-width:var(--maxw);
+    margin:0 auto;
+    padding:14px clamp(16px,5vw,48px);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+  }
+  .brand{
+    display:flex; align-items:center; gap:10px;
+    font-family:'Fraunces', serif;
+    font-weight:700;
+    font-size:1.05rem;
+    white-space:nowrap;
+  }
+  .brand-mark{
+    width:26px; height:26px; border-radius:50%;
+    background:conic-gradient(from 200deg, var(--bone-a), var(--skin-a), var(--musc-a), var(--herb-a), var(--bone-a));
+    flex:none;
+  }
+  .navlinks{
+    display:flex; gap:4px;
+    list-style:none; margin:0; padding:0;
+    font-size:0.86rem;
+    font-weight:600;
+    overflow-x:auto;
+    scrollbar-width:none;
+  }
+  .navlinks::-webkit-scrollbar{display:none;}
+  .navlinks a{
+    display:block;
+    padding:8px 14px;
+    border-radius:999px;
+    text-decoration:none;
+    color:var(--ink-soft);
+    white-space:nowrap;
+    transition:background 0.2s, color 0.2s;
+  }
+  .navlinks a:hover{ background:var(--paper-dim); color:var(--ink); }
+  .navlinks a.active{ background:var(--ink); color:var(--paper); }
+  #progress{
+    position:absolute; left:0; bottom:-1px; height:2px;
+    background:linear-gradient(90deg, var(--bone-a), var(--skin-a), var(--musc-a), var(--herb-a));
+    width:0%;
+    transition:width 0.1s linear;
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    padding:clamp(56px,10vw,96px) 0 clamp(40px,6vw,64px);
+    overflow:hidden;
+  }
+  .blob{
+    position:absolute; border-radius:50%;
+    filter:blur(50px);
+    opacity:0.55;
+    z-index:0;
+    animation:drift 22s ease-in-out infinite;
+  }
+  .blob.b1{ width:340px; height:340px; background:var(--gold-soft); top:-120px; right:-60px; }
+  .blob.b2{ width:280px; height:280px; background:var(--skin-b); bottom:-100px; left:-80px; animation-delay:-8s; }
+  .blob.b3{ width:220px; height:220px; background:var(--herb-a); top:40%; right:20%; opacity:0.25; animation-delay:-14s; }
+  @keyframes drift{
+    0%,100%{ transform:translate(0,0) scale(1); }
+    50%{ transform:translate(-20px, 24px) scale(1.08); }
+  }
+  .hero-inner{ position:relative; z-index:1; }
+  .eyebrow{
+    font-family:'Space Mono', monospace;
+    font-size:0.74rem;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--gold);
+    font-weight:700;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    margin-bottom:18px;
+  }
+  .eyebrow::before{
+    content:"";
+    width:22px; height:1px;
+    background:var(--gold);
+  }
+  .hero h1{
+    font-size:clamp(2.4rem, 6vw, 4.6rem);
+    font-weight:600;
+    line-height:1.02;
+    max-width:16ch;
+  }
+  .hero h1 em{
+    font-style:italic;
+    font-weight:500;
+    color:var(--gold);
+  }
+  .hero p.lede{
+    max-width:52ch;
+    font-size:clamp(1.02rem,1.6vw,1.18rem);
+    color:var(--ink-soft);
+    margin-top:22px;
+    line-height:1.6;
+  }
+  .chapter-legend{
+    display:flex; flex-wrap:wrap; gap:10px;
+    margin-top:34px;
+  }
+  .legend-chip{
+    display:flex; align-items:center; gap:8px;
+    padding:9px 16px 9px 10px;
+    border-radius:999px;
+    background:var(--card);
+    border:1px solid var(--line);
+    font-size:0.84rem;
+    font-weight:700;
+    text-decoration:none;
+    color:var(--ink);
+    transition:transform 0.2s, box-shadow 0.2s;
+  }
+  .legend-chip:hover{ transform:translateY(-2px); box-shadow:0 8px 18px rgba(29,43,38,0.1); }
+  .legend-dot{ width:18px; height:18px; border-radius:50%; flex:none; }
+
+  /* ---------- SECTION SHELL ---------- */
+  section.chapter{
+    position:relative;
+    padding:clamp(56px,9vw,96px) 0;
+    border-top:1px solid var(--line);
+  }
+  .chapter-head{
+    display:grid;
+    grid-template-columns:auto 1fr;
+    gap:20px 28px;
+    align-items:end;
+    margin-bottom:44px;
+  }
+  .chapter-num{
+    font-family:'Space Mono', monospace;
+    font-size:0.8rem;
+    font-weight:700;
+    padding:6px 12px;
+    border-radius:999px;
+    border:1px solid currentColor;
+    height:fit-content;
+  }
+  .chapter-title{
+    font-size:clamp(1.9rem, 4vw, 3rem);
+    font-weight:600;
+    grid-column:1 / -1;
+  }
+  .chapter-sub{
+    grid-column:1/-1;
+    max-width:62ch;
+    color:var(--ink-soft);
+    font-size:1.02rem;
+    line-height:1.65;
+  }
+
+  /* ---------- NUTRIENT CARDS ---------- */
+  .nutrient-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(270px,1fr));
+    gap:20px;
+    margin-bottom:36px;
+  }
+  .n-card{
+    background:var(--card);
+    border-radius:var(--radius);
+    padding:24px;
+    border:1px solid var(--line);
+    opacity:0;
+    transform:translateY(28px) scale(0.97);
+    filter:blur(6px);
+    transition:opacity 0.7s cubic-bezier(.22,1,.36,1), transform 0.7s cubic-bezier(.22,1,.36,1), filter 0.7s ease, box-shadow 0.3s ease;
+  }
+  .n-card.in-view{ opacity:1; transform:translateY(0) scale(1); filter:blur(0); }
+  .n-card:hover{
+    box-shadow:0 14px 30px rgba(29,43,38,0.1);
+    box-shadow:0 16px 32px color-mix(in srgb, var(--accent) 30%, transparent);
+    transform:translateY(-5px) scale(1.012);
+  }
+  .n-card:nth-child(1){ transition-delay:0s; }
+  .n-card:nth-child(2){ transition-delay:.07s; }
+  .n-card:nth-child(3){ transition-delay:.14s; }
+  .n-card:nth-child(4){ transition-delay:.21s; }
+  .n-card:nth-child(n+5){ transition-delay:.26s; }
+  .n-card-top{
+    display:flex; align-items:center; gap:12px;
+    margin-bottom:14px;
+  }
+  .n-icon{
+    width:44px; height:44px; border-radius:14px;
+    display:flex; align-items:center; justify-content:center;
+    flex:none;
+  }
+  .n-icon svg{ width:24px; height:24px; }
+  .n-name{ font-weight:800; font-size:1.05rem; }
+  .n-tag{
+    font-family:'Space Mono', monospace;
+    font-size:0.68rem;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+  }
+  .n-body{
+    font-size:0.94rem;
+    line-height:1.6;
+    color:var(--ink-soft);
+    margin-bottom:16px;
+  }
+  .food-row{
+    display:flex; flex-wrap:wrap; gap:8px;
+  }
+  .food-chip{
+    display:flex; align-items:center; gap:7px;
+    background:var(--paper);
+    border-radius:999px;
+    padding:6px 12px 6px 6px;
+    font-size:0.82rem;
+    font-weight:700;
+  }
+  .food-chip svg{ width:20px; height:20px; }
+  .food-icon-wrap{
+    width:24px;height:24px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    flex:none;
+  }
+
+  /* synergy panel */
+  .synergy{
+    border-radius:var(--radius);
+    padding:28px clamp(20px,4vw,34px);
+    display:grid;
+    grid-template-columns:auto 1fr;
+    gap:10px 22px;
+    align-items:start;
+  }
+  .synergy-label{
+    font-family:'Space Mono',monospace;
+    font-size:0.72rem;
+    text-transform:uppercase;
+    letter-spacing:0.1em;
+    font-weight:700;
+    padding-top:4px;
+  }
+  .synergy h3{
+    grid-column:1/-1;
+    font-size:1.3rem;
+    font-weight:600;
+    margin-bottom:2px;
+  }
+  .synergy p{
+    grid-column:1/-1;
+    margin:0;
+    line-height:1.65;
+    max-width:70ch;
+  }
+  .synergy-chain{
+    grid-column:1/-1;
+    display:flex; flex-wrap:wrap; align-items:center; gap:8px;
+    margin-top:14px;
+    font-weight:800;
+    font-size:0.92rem;
+  }
+  .synergy-chain span.node{
+    padding:7px 14px;
+    border-radius:999px;
+    background:rgba(255,255,255,0.55);
+  }
+  .synergy-chain .arrow{ opacity:0.55; font-weight:400; }
+
+  /* section theming */
+  #bones .chapter-num{ color:var(--bone-a); }
+  #bones .n-icon{ background:var(--bone-b); color:var(--bone-a); }
+  #bones .food-icon-wrap{ background:var(--bone-b); color:var(--bone-a); }
+  #bones .synergy{ background:var(--bone-tint); border:1px solid var(--bone-b); }
+  #bones .synergy-label{ color:var(--bone-a); }
+
+  #skin .chapter-num{ color:var(--skin-a); }
+  #skin .n-icon{ background:var(--skin-b); color:var(--skin-a); }
+  #skin .food-icon-wrap{ background:var(--skin-b); color:var(--skin-a); }
+  #skin .synergy{ background:var(--skin-tint); border:1px solid var(--skin-b); }
+  #skin .synergy-label{ color:var(--skin-a); }
+
+  #muscle .chapter-num{ color:var(--musc-a); }
+  #muscle .n-icon{ background:var(--musc-b); color:var(--musc-a); }
+  #muscle .food-icon-wrap{ background:var(--musc-b); color:var(--musc-a); }
+  #muscle .synergy{ background:var(--musc-tint); border:1px solid var(--musc-b); }
+  #muscle .synergy-label{ color:var(--musc-a); }
+
+  /* ---------- DAY-CYCLE CHAPTER BACKGROUNDS ---------- */
+  #bones{
+    --ink:#4A2E1D; --ink-soft:#7A5A42; --line:rgba(74,46,29,0.18);
+    --card:rgba(255,255,255,0.62); --paper:rgba(255,255,255,0.5);
+    --accent:var(--bone-a);
+  }
+  #skin{
+    --ink:#2A2620; --ink-soft:#5C5648; --line:rgba(42,38,32,0.16);
+    --card:rgba(255,255,255,0.72); --paper:rgba(255,255,255,0.55);
+    --accent:var(--skin-a);
+  }
+  #muscle{
+    --ink:#3B2013; --ink-soft:#6B4630; --line:rgba(59,32,19,0.2);
+    --card:rgba(255,255,255,0.68); --paper:rgba(255,255,255,0.52);
+    --accent:var(--musc-a);
+  }
+
+  .chapter-tag{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+  .daypart{
+    font-family:'Space Mono',monospace;
+    font-size:0.72rem;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+  }
+  .chapter-top{
+    display:flex;
+    gap:32px;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap-reverse;
+    margin-bottom:44px;
+  }
+  .chapter-top .chapter-head{ margin-bottom:0; flex:1 1 380px; }
+  .chapter-visual{
+    flex:0 0 auto;
+    width:clamp(120px,18vw,190px);
+    aspect-ratio:1;
+    border-radius:50%;
+    background:rgba(255,255,255,0.35);
+    display:flex; align-items:center; justify-content:center;
+    padding:20px;
+  }
+  .chapter-visual svg{ width:100%; height:100%; display:block; }
+  #herbs .chapter-visual{ background:rgba(255,255,255,0.06); }
+  .chapter-visual.photo{ padding:6px; }
+  .chapter-visual img{ width:100%; height:100%; border-radius:50%; display:block; object-fit:contain; }
+  .chapter-visual img.cover{ object-fit:cover; }
+  .chapter-visual{ will-change:transform; }
+
+  /* ---------- CHAPTER TITLE REVEAL ---------- */
+  .chapter-title{ position:relative; }
+  .chapter-title::after{
+    content:"";
+    position:absolute;
+    left:1px; bottom:-10px;
+    height:4px; width:0;
+    border-radius:2px;
+    background:var(--accent, currentColor);
+    transition:width 0.9s cubic-bezier(.22,1,.36,1) 0.15s;
+  }
+  .chapter-head.in-view .chapter-title::after{ width:72px; }
+
+  /* ---------- SKY BAND: travelling sun + drifting clouds ---------- */
+  .sky-band{
+    position:fixed; top:0; left:0; width:100%;
+    height:clamp(64px,9vw,100px);
+    z-index:40; pointer-events:none; overflow:hidden;
+  }
+  .sun-orb{
+    position:absolute; left:6%; top:60%;
+    width:clamp(28px,4vw,46px); height:clamp(28px,4vw,46px);
+    border-radius:50%;
+    background:radial-gradient(circle at 35% 35%, #FFF6DE, #F3B84A 55%, #E8933A 100%);
+    box-shadow:0 0 26px 8px rgba(243,184,74,0.4);
+    transform:translateY(-50%);
+    opacity:0;
+    transition:opacity 0.4s ease;
+    will-change:left, top, opacity;
+  }
+  .cloud{
+    position:absolute;
+    background:rgba(255,255,255,0.8);
+    border-radius:50%;
+    filter:blur(7px);
+    left:-160px;
+    animation:drift-cloud linear infinite;
+  }
+  @keyframes drift-cloud{
+    from{ transform:translateX(0); }
+    to{ transform:translateX(calc(100vw + 300px)); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .cloud{ animation:none; opacity:0; }
+    .sun-orb{ transition:none; }
+  }
+
+  /* ---------- GLOWING SYNERGY CHAIN ---------- */
+  .synergy-chain .node{
+    transition:background 0.4s ease, color 0.4s ease, box-shadow 0.4s ease, transform 0.4s ease;
+  }
+  .synergy-chain .node.lit{
+    background:var(--accent);
+    color:#fff;
+    box-shadow:0 0 18px color-mix(in srgb, var(--accent) 55%, transparent);
+    transform:translateY(-2px);
+  }
+
+  /* ---------- AMBIENT PARTICLES ---------- */
+  .particle-field{
+    position:absolute; inset:0; overflow:hidden;
+    pointer-events:none; z-index:-1;
+  }
+  .p-layer{
+    position:absolute; inset:0;
+    will-change:transform;
+  }
+  .particle{
+    position:absolute;
+    border-radius:50%;
+    animation:float-up linear infinite;
+    will-change:transform, opacity;
+  }
+  @keyframes float-up{
+    0%{ transform:translateY(0) translateX(0); opacity:0; }
+    10%{ opacity:var(--pmax,0.6); }
+    90%{ opacity:var(--pmax,0.6); }
+    100%{ transform:translateY(-140px) translateX(var(--drift,12px)); opacity:0; }
+  }
+  @keyframes twinkle{
+    0%,100%{ opacity:0.15; transform:scale(0.8); }
+    50%{ opacity:1; transform:scale(1.15); }
+  }
+  #bones .particle{ background:radial-gradient(circle, #fff 0%, var(--bone-a) 70%); }
+  #skin .particle{ background:radial-gradient(circle, #fff 0%, var(--skin-b) 70%); filter:blur(1px); }
+  #muscle .particle{ background:radial-gradient(circle, #FFE3B0 0%, var(--musc-a) 75%); }
+  #herbs .particle{ background:var(--herb-b); animation-name:twinkle; box-shadow:0 0 6px var(--herb-b); }
+  @media (prefers-reduced-motion: reduce){
+    .particle{ display:none; }
+  }
+
+  /* ---------- HERO SPOTLIGHT ---------- */
+  .spotlight{
+    position:absolute; inset:0; z-index:0; pointer-events:none;
+    background:radial-gradient(320px circle at var(--sx,50%) var(--sy,20%), rgba(201,138,34,0.16), transparent 70%);
+    transition:background 0.2s ease;
+  }
+
+  /* ---------- CHIP / ICON MICRO-INTERACTION ---------- */
+  .food-chip{ transition:transform 0.25s ease, box-shadow 0.25s ease; }
+  .food-chip:hover{ transform:translateY(-2px); box-shadow:0 6px 14px rgba(0,0,0,0.1); }
+  .food-chip svg{ transition:transform 0.35s cubic-bezier(.34,1.56,.64,1); }
+  .food-chip:hover svg{ transform:scale(1.2) rotate(-8deg); }
+  .legend-dot{ transition:transform 0.3s ease; }
+  .legend-chip:hover .legend-dot{ transform:scale(1.3) rotate(20deg); }
+
+  /* ---------- HERBS (dark chapter) ---------- */
+  #herbs{
+    color:var(--herb-ink);
+    border-top:1px solid rgba(255,255,255,0.08);
+    --accent:var(--herb-b);
+  }
+  #herbs .chapter-num{ color:var(--herb-b); }
+  #herbs .chapter-sub{ color:var(--herb-ink-soft); }
+  .herb-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(280px,1fr));
+    gap:20px;
+  }
+  .h-card{
+    background:rgba(255,255,255,0.05);
+    border:1px solid rgba(255,255,255,0.12);
+    border-radius:var(--radius);
+    padding:24px;
+    opacity:0;
+    transform:translateY(28px) scale(0.97);
+    filter:blur(6px);
+    transition:opacity 0.7s cubic-bezier(.22,1,.36,1), transform 0.7s cubic-bezier(.22,1,.36,1), filter 0.7s ease, background 0.25s;
+  }
+  .h-card.in-view{ opacity:1; transform:translateY(0) scale(1); filter:blur(0); }
+  .h-card:hover{ background:rgba(255,255,255,0.09); transform:translateY(-5px) scale(1.012); box-shadow:0 16px 34px rgba(0,0,0,0.35); }
+  .h-card:nth-child(1){ transition-delay:0s; }
+  .h-card:nth-child(2){ transition-delay:.06s; }
+  .h-card:nth-child(3){ transition-delay:.12s; }
+  .h-card:nth-child(4){ transition-delay:.18s; }
+  .h-card:nth-child(5){ transition-delay:.24s; }
+  .h-card:nth-child(n+6){ transition-delay:.3s; }
+  .h-top{ display:flex; align-items:center; gap:12px; margin-bottom:12px; }
+  .h-icon{
+    width:44px;height:44px;border-radius:14px;
+    background:rgba(240,217,153,0.16);
+    color:var(--herb-b);
+    display:flex; align-items:center; justify-content:center;
+    flex:none;
+  }
+  .h-icon svg{ width:24px; height:24px; }
+  .h-name{ font-weight:800; font-size:1.05rem; }
+  .h-latin{
+    font-style:italic;
+    font-size:0.78rem;
+    color:var(--herb-ink-soft);
+  }
+  .h-body{ font-size:0.93rem; line-height:1.65; color:var(--herb-ink-soft); }
+  .h-tradition{
+    margin-top:14px;
+    font-family:'Space Mono',monospace;
+    font-size:0.72rem;
+    color:var(--herb-b);
+    letter-spacing:0.03em;
+  }
+
+  /* ---------- INDEX (reference glossary) ---------- */
+  #index{
+    background:
+      repeating-linear-gradient(180deg, rgba(29,43,38,0.05) 0 1px, transparent 1px 38px),
+      var(--paper-dim);
+    --accent:var(--gold);
+  }
+  .index-group{ margin-bottom:38px; }
+  .index-group:last-child{ margin-bottom:0; }
+  .index-group h3{
+    font-size:1.15rem;
+    font-weight:700;
+    margin-bottom:18px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .index-group h3::after{
+    content:"";
+    flex:1;
+    height:1px;
+    background:var(--line);
+  }
+  .index-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(230px,1fr));
+    gap:14px;
+  }
+  .idx-card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:16px 18px;
+    opacity:0;
+    transform:translateY(18px) scale(0.97);
+    filter:blur(4px);
+    transition:opacity 0.55s cubic-bezier(.22,1,.36,1), transform 0.55s cubic-bezier(.22,1,.36,1), filter 0.55s ease, box-shadow 0.25s ease;
+  }
+  .idx-card.in-view{ opacity:1; transform:translateY(0) scale(1); filter:blur(0); }
+  .idx-card:hover{ box-shadow:0 10px 22px color-mix(in srgb, var(--gold) 25%, transparent); transform:translateY(-3px); }
+  .idx-card:nth-child(1){ transition-delay:0s; }
+  .idx-card:nth-child(2){ transition-delay:.04s; }
+  .idx-card:nth-child(3){ transition-delay:.08s; }
+  .idx-card:nth-child(4){ transition-delay:.12s; }
+  .idx-card:nth-child(5){ transition-delay:.16s; }
+  .idx-card:nth-child(n+6){ transition-delay:.2s; }
+  .idx-head{ display:flex; align-items:baseline; justify-content:space-between; gap:8px; margin-bottom:4px; }
+  .idx-code{
+    font-family:'Space Mono',monospace;
+    font-weight:700;
+    font-size:0.78rem;
+    color:var(--gold);
+  }
+  .idx-name{ font-weight:800; font-size:0.98rem; }
+  .idx-alt{ font-size:0.76rem; color:var(--ink-soft); font-style:italic; margin-bottom:8px; }
+  .idx-note{ font-size:0.86rem; line-height:1.55; color:var(--ink-soft); margin-bottom:10px; }
+  .idx-sources{
+    font-family:'Space Mono',monospace;
+    font-size:0.68rem;
+    letter-spacing:0.02em;
+    color:var(--ink);
+    opacity:0.7;
+  }
+  .idx-rda{
+    display:flex; flex-wrap:wrap; gap:5px 10px;
+    margin-top:12px; padding-top:10px;
+    border-top:1px dashed var(--line);
+    font-family:'Space Mono',monospace;
+    font-size:0.68rem;
+  }
+  .idx-rda span b{ font-weight:700; opacity:0.55; margin-right:3px; font-style:normal; }
+  .idx-preg{
+    margin-top:6px;
+    font-size:0.72rem;
+    color:var(--gold);
+    font-style:italic;
+  }
+  .index-note{
+    font-size:0.86rem;
+    color:var(--ink-soft);
+    line-height:1.6;
+    max-width:70ch;
+    margin:-8px 0 20px;
+  }
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    border-top:1px solid var(--line);
+    padding:40px 0 56px;
+  }
+  .foot-inner{
+    display:flex; flex-wrap:wrap; justify-content:space-between; gap:20px;
+    align-items:flex-start;
+  }
+  .disclaimer{
+    max-width:56ch;
+    font-size:0.86rem;
+    line-height:1.6;
+    color:var(--ink-soft);
+  }
+  .foot-brand{
+    font-family:'Fraunces', serif;
+    font-weight:700;
+  }
+
+  @media (max-width:640px){
+    .chapter-head{ grid-template-columns:1fr; }
+    .synergy{ grid-template-columns:1fr; }
+    .synergy-label{ padding-top:0; }
+  }
+</style>
+
+<div class="sky-band" id="skyBand" aria-hidden="true">
+  <div class="sun-orb" id="sunOrb"></div>
+  <div class="cloud" style="width:110px;height:34px;top:18%;animation-duration:52s;animation-delay:-6s;"></div>
+  <div class="cloud" style="width:80px;height:26px;top:55%;animation-duration:40s;animation-delay:-22s;"></div>
+  <div class="cloud" style="width:140px;height:40px;top:5%;animation-duration:64s;animation-delay:-38s;"></div>
+</div>
+
+<nav id="topnav">
+  <div class="nav-inner">
+    <div class="brand"><span class="brand-mark"></span>The Nutrient Atlas</div>
+    <ul class="navlinks">
+      <li><a href="#bones" data-nav>Bones</a></li>
+      <li><a href="#skin" data-nav>Skin</a></li>
+      <li><a href="#muscle" data-nav>Muscle &amp; Tendon</a></li>
+      <li><a href="#herbs" data-nav>Sleep Herbs</a></li>
+      <li><a href="#index" data-nav>Index</a></li>
+    </ul>
+  </div>
+  <div id="progress"></div>
+</nav>
+
+<header class="hero" id="hero">
+  <div class="spotlight" id="spotlight"></div>
+  <div class="blob b1" id="blob1"></div>
+  <div class="blob b2" id="blob2"></div>
+  <div class="blob b3" id="blob3"></div>
+  <div class="wrap hero-inner">
+    <div class="eyebrow">A field guide to eating well</div>
+    <h1>What to eat for <em>stronger bones</em>, calmer skin &amp; muscles that hold up.</h1>
+    <p class="lede">Four chapters through the body's building blocks — the vitamins, minerals, and Ayurvedic roots that keep it running — paired with the everyday foods that carry them, followed by a full A-to-K reference on every vitamin and mineral.</p>
+    <div class="chapter-legend">
+      <a class="legend-chip" href="#bones"><span class="legend-dot" style="background:var(--bone-a)"></span>01 Bones</a>
+      <a class="legend-chip" href="#skin"><span class="legend-dot" style="background:var(--skin-a)"></span>02 Skin</a>
+      <a class="legend-chip" href="#muscle"><span class="legend-dot" style="background:var(--musc-a)"></span>03 Muscle &amp; Tendon</a>
+      <a class="legend-chip" href="#herbs"><span class="legend-dot" style="background:var(--herb-a)"></span>04 Sleep Herbs</a>
+      <a class="legend-chip" href="#index"><span class="legend-dot" style="background:var(--gold)"></span>05 The Full Index</a>
+    </div>
+  </div>
+</header>
+
+<!-- ================= ICON SPRITE ================= -->
+<svg width="0" height="0" style="position:absolute">
+<defs>
+<symbol id="i-bone" viewBox="0 0 24 24"><path fill="currentColor" d="M6.5 3a2.5 2.5 0 0 1 2.34 3.4l6.76 6.76A2.5 2.5 0 1 1 17.6 15l-6.76-6.76A2.5 2.5 0 1 1 6.5 3Zm11 18a2.5 2.5 0 0 1-2.34-3.4L8.4 10.84A2.5 2.5 0 1 1 6.4 9l6.76 6.76A2.5 2.5 0 1 1 17.5 21Z"/></symbol>
+<symbol id="i-drop" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2s6 7.2 6 11.4A6 6 0 0 1 6 13.4C6 9.2 12 2 12 2Z"/></symbol>
+<symbol id="i-shield" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2 4 5v6c0 5 3.4 8.7 8 11 4.6-2.3 8-6 8-11V5l-8-3Z"/></symbol>
+<symbol id="i-leaf" viewBox="0 0 24 24"><path fill="currentColor" d="M20 4C10 4 4 10 4 18v2h2c8 0 14-6 14-14V4Z"/></symbol>
+<symbol id="i-sun" viewBox="0 0 24 24"><circle fill="currentColor" cx="12" cy="12" r="4.2"/><g stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></g></symbol>
+<symbol id="i-spark" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2c.6 3.6 2 6.4 5 8-3 1.6-4.4 4.4-5 8-.6-3.6-2-6.4-5-8 3-1.6 4.4-4.4 5-8Z"/></symbol>
+<symbol id="i-flex" viewBox="0 0 24 24"><path fill="currentColor" d="M3 13c3-4 6-4 8-1 2 3 4.5 3.5 7-1l2 1.4c-3.2 5-6.8 5.4-9.6 1.4-1.8-2.6-3.4-2.4-5.4.4L3 13Z"/></symbol>
+<symbol id="i-thread" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M4 20C10 14 10 10 4 4M20 20c-6-6-6-10 0-16" /></symbol>
+<symbol id="i-milk" viewBox="0 0 24 24"><path fill="currentColor" d="M9 2h6l1 3-1.6 1.6c-.3.3-.4.6-.4 1V21a1 1 0 0 1-1 1H10a1 1 0 0 1-1-1V7.6c0-.4-.1-.7-.4-1L7 5l2-3Z"/></symbol>
+<symbol id="i-fish" viewBox="0 0 24 24"><path fill="currentColor" d="M3 12c3-4 9-6 13-4l3-2-1 4 1 4-3-2c-4 2-10 0-13-4Zm12.5 0a1 1 0 1 1 0 .1Z"/></symbol>
+<symbol id="i-seed" viewBox="0 0 24 24"><ellipse fill="currentColor" cx="12" cy="12" rx="4" ry="7" transform="rotate(20 12 12)"/></symbol>
+<symbol id="i-nut" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2c3.5 0 6 3.6 6 9s-2.7 11-6 11-6-6.6-6-11 2.5-9 6-9Z"/></symbol>
+<symbol id="i-citrus" viewBox="0 0 24 24"><circle fill="currentColor" cx="12" cy="12" r="9"/><g stroke="#fff" stroke-width="1" opacity=".8"><path d="M12 3v18M4 8l16 8M20 8 4 16"/></g></symbol>
+<symbol id="i-berry" viewBox="0 0 24 24"><circle fill="currentColor" cx="9" cy="14" r="5"/><circle fill="currentColor" cx="15" cy="10" r="4"/><path stroke="currentColor" stroke-width="1.6" fill="none" d="M12 3c1 1.5 1 3 0 4"/></symbol>
+<symbol id="i-egg" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2C8 8 5 13 5 16.5a7 7 0 0 0 14 0C19 13 16 8 12 2Z"/></symbol>
+<symbol id="i-root" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2v7M12 9c-2 1-3 3-3 6M12 9c2 1 3 3 3 6M9.5 15c-1.5.5-2 2-2 4M14.5 15c1.5.5 2 2 2 4"/><path fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" d="M12 2v7M12 9c-2 1-3 3-3 6M12 9c2 1 3 3 3 6M9.5 15c-1.5.5-2 2-2 4M14.5 15c1.5.5 2 2 2 4"/></symbol>
+<symbol id="i-grain" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2c2 3 2 5 0 7-2-2-2-4 0-7Zm0 6c2.2 2.4 2.2 5 0 7.5-2.2-2.5-2.2-5.1 0-7.5Zm0 7c2 2 2 4.2 0 7-2-2.8-2-5 0-7Z"/></symbol>
+<symbol id="i-mush" viewBox="0 0 24 24"><path fill="currentColor" d="M4 11c0-4.4 3.6-7 8-7s8 2.6 8 11H4Z"/><rect fill="currentColor" x="10" y="11" width="4" height="9" rx="1.5"/></symbol>
+<symbol id="i-bowl" viewBox="0 0 24 24"><path fill="currentColor" d="M3 11h18a9 9 0 0 1-18 0Z"/><rect fill="currentColor" x="10.5" y="3" width="3" height="7" rx="1.2"/></symbol>
+<symbol id="i-moon" viewBox="0 0 24 24"><path fill="currentColor" d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 1 0 10.5 10.5Z"/></symbol>
+<symbol id="i-flower" viewBox="0 0 24 24"><g fill="currentColor"><circle cx="12" cy="12" r="2.4"/><circle cx="12" cy="5" r="3"/><circle cx="12" cy="19" r="3"/><circle cx="5" cy="12" r="3"/><circle cx="19" cy="12" r="3"/></g></symbol>
+
+<!-- large chapter illustrations -->
+<symbol id="i-bone-big" viewBox="0 0 200 100">
+  <defs>
+    <linearGradient id="boneGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFFBF0"/>
+      <stop offset="1" stop-color="#E4C583"/>
+    </linearGradient>
+  </defs>
+  <ellipse cx="100" cy="82" rx="70" ry="8" fill="#4A2E1D" opacity="0.12"/>
+  <g transform="rotate(-18 100 50)">
+    <rect x="55" y="37" width="90" height="26" rx="13" fill="url(#boneGrad)"/>
+    <circle cx="35" cy="30" r="21" fill="url(#boneGrad)"/>
+    <circle cx="35" cy="70" r="21" fill="url(#boneGrad)"/>
+    <circle cx="165" cy="30" r="21" fill="url(#boneGrad)"/>
+    <circle cx="165" cy="70" r="21" fill="url(#boneGrad)"/>
+    <path d="M60 40c8 6 8 14 0 20" stroke="#C79A3B" stroke-width="2" fill="none" opacity="0.5"/>
+    <path d="M140 40c8 6 8 14 0 20" stroke="#C79A3B" stroke-width="2" fill="none" opacity="0.5"/>
+    <rect x="62" y="42" width="76" height="6" rx="3" fill="#FFFDF6" opacity="0.7"/>
+  </g>
+</symbol>
+
+<symbol id="i-athlete" viewBox="0 0 160 210">
+  <g fill="currentColor">
+    <ellipse cx="80" cy="24" rx="17" ry="19"/>
+    <rect x="70" y="38" width="20" height="14" rx="6"/>
+    <path d="M40 60c6-14 24-22 40-22s34 8 40 22l6 20c2 8-4 15-11 13l-9-3c-2 12-4 20-4 30 2 20 6 34 10 52 2 9-5 16-13 14-6-2-9-8-10-16-3-16-6-28-9-40-3 12-6 24-9 40-1 8-4 14-10 16-8 2-15-5-13-14 4-18 8-32 10-52 0-10-2-18-4-30l-9 3c-7 2-13-5-11-13l6-20Z"/>
+    <circle cx="34" cy="66" r="15"/>
+    <circle cx="126" cy="66" r="15"/>
+  </g>
+  <g fill="#fff" opacity="0.3">
+    <ellipse cx="62" cy="78" rx="12" ry="16"/>
+    <ellipse cx="98" cy="78" rx="12" ry="16"/>
+    <rect x="68" y="100" width="10" height="12" rx="3"/>
+    <rect x="82" y="100" width="10" height="12" rx="3"/>
+    <rect x="68" y="116" width="10" height="12" rx="3"/>
+    <rect x="82" y="116" width="10" height="12" rx="3"/>
+    <rect x="70" y="132" width="9" height="11" rx="3"/>
+    <rect x="81" y="132" width="9" height="11" rx="3"/>
+  </g>
+  <g stroke="#fff" stroke-width="1.6" fill="none" opacity="0.4">
+    <path d="M30 60c-4 10-4 18 2 24"/>
+    <path d="M130 60c4 10 4 18-2 24"/>
+  </g>
+</symbol>
+
+<symbol id="i-root-bundle" viewBox="0 0 170 210">
+  <g>
+    <path d="M55 30 L70 30 L64 150 Q60 165 55 150 Z" fill="var(--herb-b)" opacity="0.9"/>
+    <path d="M85 15 L104 15 L96 175 Q90 195 84 175 Z" fill="var(--herb-a)" opacity="0.95"/>
+    <path d="M112 40 L126 40 L121 140 Q118 155 113 140 Z" fill="var(--herb-b)" opacity="0.75"/>
+    <g stroke="var(--herb-ink-soft)" stroke-width="1.6" fill="none" opacity="0.7">
+      <path d="M62 80c-10 4-14 10-16 18"/>
+      <path d="M64 110c8 3 13 9 14 16"/>
+      <path d="M92 100c-10 3-15 9-17 17"/>
+      <path d="M93 140c9 3 14 9 15 17"/>
+      <path d="M117 80c-8 3-12 8-13 15"/>
+    </g>
+    <use href="#i-leaf" x="42" y="0" width="26" height="26" fill="var(--herb-a)"/>
+    <use href="#i-leaf" x="76" y="-14" width="30" height="30" fill="var(--herb-b)"/>
+    <use href="#i-leaf" x="104" y="12" width="24" height="24" fill="var(--herb-a)"/>
+  </g>
+</symbol>
+</defs>
+</svg>
+
+<main>
+
+<!-- ================= BONES ================= -->
+<section class="chapter" id="bones">
+  <div class="particle-field" aria-hidden="true">
+    <div class="p-layer" data-depth="0.15">
+      <span class="particle" style="width:6px;height:6px;left:8%;bottom:10%;--pmax:.4;--drift:14px;animation-duration:11s;animation-delay:0s;"></span>
+      <span class="particle" style="width:5px;height:5px;left:40%;bottom:5%;--pmax:.35;--drift:18px;animation-duration:13s;animation-delay:4s;"></span>
+      <span class="particle" style="width:9px;height:9px;left:80%;bottom:12%;--pmax:.35;--drift:10px;animation-duration:12s;animation-delay:5s;"></span>
+    </div>
+    <div class="p-layer" data-depth="0.45">
+      <span class="particle" style="width:5px;height:5px;left:22%;bottom:30%;--pmax:.45;--drift:-10px;animation-duration:9s;animation-delay:2s;"></span>
+      <span class="particle" style="width:7px;height:7px;left:65%;bottom:22%;--pmax:.5;--drift:-14px;animation-duration:10s;animation-delay:1s;"></span>
+      <span class="particle" style="width:5px;height:5px;left:92%;bottom:34%;--pmax:.5;--drift:-8px;animation-duration:8.5s;animation-delay:3s;"></span>
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="chapter-top">
+      <div class="chapter-head">
+        <div class="chapter-tag"><span class="chapter-num">Chapter 01</span></div>
+        <h2 class="chapter-title">Bones</h2>
+        <p class="chapter-sub">Bone is living tissue that rebuilds itself for life — but it needs raw material delivered on schedule. These four nutrients work as a single supply chain: miss one link and the others can't finish the job.</p>
+      </div>
+      <div class="chapter-visual photo"><img src="images/bone-photo.webp" alt="Illustration of a bone"></div>
+    </div>
+
+    <div class="nutrient-grid">
+      <article class="n-card">
+        <div class="n-card-top">
+          <div class="n-icon"><svg><use href="#i-bone"/></svg></div>
+          <div><div class="n-name">Calcium</div><div class="n-tag">The structural mineral</div></div>
+        </div>
+        <p class="n-body">About 99% of the body's calcium is stored in bones and teeth, giving them their rigidity. Blood calcium is kept tightly stable — if diet falls short, the body withdraws it from bone to keep the rest of the body running.</p>
+        <div class="food-row">
+          <span class="food-chip"><span class="food-icon-wrap"><svg><use href="#i-milk"/></svg></span>Milk &amp; yogurt</span>
+          <span class="food-chip"><span class="food-icon-wrap"><svg><use href="#i-leaf"/></svg></span>Kale &amp; bok choy</span>
+          <span class="food-chip"><span class="food-icon-wrap"><svg><use href="#i-seed"/></svg></span>Sesame &amp; til</span>
+          <span class="food-chip"><span class="food-icon-wrap"><svg><use href="#i-fish"/></svg></span>Sardines</span>
+        </div>
+      </article>
+
+      <article class="n-card">
+        <div class="n-card-top">
+          <div class="n-icon"><svg><use href="#i-sun"/></svg></div>
+          <div><div class="n-name">Vitamin D3 &amp; D2</div><div class="n-tag">The absorption key</div></div>
+        </div>
+        <p class="n-body">Without vitamin D, the gut absorbs only a fraction of dietary calcium. D3 (cholecalciferol) is made in skin from sunlight and comes from animal foods; D2 (ergocalciferol) is the plant and fungal form — both convert to the same active hormone in the liver and kidneys.</p>
+        <div class="food-row">
+          <span class="food-chip"><span class="food-icon-wrap"><svg><use href="#i-sun"/></svg></span>Sunlight, 10–20 min</span>
+          <span class="food-chip"><span class="food-icon-wrap"><svg><use href="#i-fish"/></svg></span>Salmon &amp; mackerel</span>
+          <span class="food-chip"><span class="food-icon-wrap"><svg><use href="#i-egg"/></svg></span>Egg yolk</span>
+          <span class="food-chip"><span class="food-icon-wrap"><svg><use href="#i-mush"/></svg></span>Sun-dried mushrooms</span>
+        </div>
+      </article>
+
+      <article class="n-card">
+        <div class="n-card-top">
+          <div class="n-icon"><svg><use href="#i-spark"/></svg></div>
+          <div><div class="n-name">Magnesium</div><div class="n-tag">The activator</div></div>
+        </div>
+        <p class="n-body">Roughly 60% of the body's magnesium sits in bone. It's also required to convert vitamin D into its active form — low magnesium can leave vitamin D metabolically "stuck," even at good blood levels.</p>
+        <div class="food-row">
+          <span class="food-chip"><span class="food-icon-wrap"><svg><use href="#i-seed"/></svg></span>Pumpkin seeds</span>
+          <span class="food-chip"><span class="food-icon-wrap"><svg><use href="#i-leaf"/></svg></span>Spinach</span>
+          <span class="food-chip"><span class="food-icon-wrap"><svg><use href="#i-nut"/></svg></span>Almonds</span>
+          <span class="food-chip"><span class="food-icon-wrap"><svg><use href="#i-grain"/></svg></span>Dark chocolate</span>
+        </div>
+      </article>
+
+      <article class="n-card">
+        <div class="n-card-top">
+          <div class="n-icon"><svg><use href="#i-shield"/></svg></div>
+          <div><div class="n-name">Vitamin K2</div><div class="n-tag">The traffic controller</div></div>
+        </div>
+        <p class="n-body">K2 activates a protein (osteocalcin) that binds calcium into the bone matrix — and another that keeps calcium out of artery walls. It's the least talked-about of the four, and arguably decides where all that calcium actually ends up.</p>
+        <div class="food-row">
+          <span class="food-chip"><span class="food-icon-wrap"><svg><use href="#i-egg"/></svg></span>Egg yolk</span>
+          <span class="food-chip"><span class="food-icon-wrap"><svg><use href="#i-milk"/></svg></span>Hard cheese</span>
+          <span class="food-chip"><span class="food-icon-wrap"><svg><use href="#i-bowl"/></svg></span>Chicken liver</span>
+        </div>
+      </article>
+    </div>
+
+    <div class="synergy">
+      <span class="synergy-label">Why together</span>
+      <h3>One chain, four links</h3>
+      <p>Calcium is the brick. D3/D2 opens the gut door to let it in. Magnesium turns the key that activates vitamin D. K2 directs the calcium once it's in the bloodstream — into bone, not arteries. Loading up on calcium alone, without the other three, is the most common gap.</p>
+      <div class="synergy-chain">
+        <span class="node">Calcium</span><span class="arrow">absorbed via</span>
+        <span class="node">Vitamin D</span><span class="arrow">activated by</span>
+        <span class="node">Magnesium</span><span class="arrow">directed by</span>
+        <span class="node">Vitamin K2</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SKIN ================= -->
+<section class="chapter" id="skin">
+  <div class="particle-field" aria-hidden="true">
+    <div class="p-layer" data-depth="0.12">
+      <span class="particle" style="width:26px;height:26px;left:35%;bottom:6%;--pmax:.3;--drift:-16px;animation-duration:17s;animation-delay:3s;filter:blur(3px);"></span>
+      <span class="particle" style="width:22px;height:22px;left:78%;bottom:10%;--pmax:.3;--drift:-10px;animation-duration:15s;animation-delay:2s;filter:blur(2px);"></span>
+    </div>
+    <div class="p-layer" data-depth="0.4">
+      <span class="particle" style="width:18px;height:18px;left:12%;bottom:15%;--pmax:.35;--drift:10px;animation-duration:14s;animation-delay:0s;filter:blur(2px);"></span>
+      <span class="particle" style="width:14px;height:14px;left:58%;bottom:25%;--pmax:.35;--drift:12px;animation-duration:12s;animation-delay:6s;filter:blur(2px);"></span>
+      <span class="particle" style="width:10px;height:10px;left:90%;bottom:32%;--pmax:.35;--drift:8px;animation-duration:11s;animation-delay:4s;filter:blur(1px);"></span>
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="chapter-top">
+      <div class="chapter-head">
+        <div class="chapter-tag"><span class="chapter-num">Chapter 02</span></div>
+        <h2 class="chapter-title">Skin</h2>
+        <p class="chapter-sub">Skin's firmness comes from a protein scaffold called collagen. The body can build its own — but only with the right cofactors on hand, and production slows year over year from your mid-twenties.</p>
+      </div>
+      <div class="chapter-visual" style="color:var(--skin-a)"><svg><use href="#i-athlete"/></svg></div>
+    </div>
+
+    <div class="nutrient-grid">
+      <article class="n-card">
+        <div class="n-card-top">
+          <div class="n-icon"><svg><use href="#i-thread"/></svg></div>
+          <div><div class="n-name">Collagen</div><div class="n-tag">The scaffold protein</div></div>
+        </div>
+        <p class="n-body">Type I and III collagen make up most of skin's structural mesh. It thins with age and sun exposure; dietary collagen and its amino acids (glycine, proline) supply raw building blocks for the skin to keep rebuilding it.</p>
+        <div class="food-row">
+          <span class="food-chip"><span class="food-icon-wrap"><svg><use href="#i-bowl"/></svg></span>Bone broth</span>
+          <span class="food-chip"><span class="food-icon-wrap"><svg><use href="#i-fish"/></svg></span>Fish skin</span>
+          <span class="food-chip"><span class="food-icon-wrap"><svg><use href="#i-egg"/></svg></span>Chicken skin</span>
+        </div>
+      </article>
+
+      <article class="n-card">
+        <div class="n-card-top">
+          <div class="n-icon"><svg><use href="#i-citrus"/></svg></div>
+          <div><div class="n-name">Vitamin C</div><div class="n-tag">The builder's cofactor</div></div>
+        </div>
+        <p class="n-body">Collagen literally cannot be assembled without vitamin C — it's required by the enzymes that stabilize the collagen molecule. It's also a strong antioxidant that protects existing collagen from UV breakdown.</p>
+        <div class="food-row">
+          <span class="food-chip"><span class="food-icon-wrap"><svg><use href="#i-citrus"/></svg></span>Amla &amp; orange</span>
+          <span class="food-chip"><span class="food-icon-wrap"><svg><use href="#i-leaf"/></svg></span>Bell pepper</span>
+          <span class="food-chip"><span class="food-icon-wrap"><svg><use href="#i-berry"/></svg></span>Guava &amp; strawberry</span>
+        </div>
+      </article>
+
+      <article class="n-card">
+        <div class="n-card-top">
+          <div class="n-icon"><svg><use href="#i-shield"/></svg></div>
+          <div><div class="n-name">Zinc</div><div class="n-tag">Repair &amp; oil balance</div></div>
+        </div>
+        <p class="n-body">Zinc supports wound healing and skin cell turnover, and helps regulate oil (sebum) production — one reason it's a go-to for acne-prone skin.</p>
+        <div class="food-row">
+          <span class="food-chip"><span class="food-icon-wrap"><svg><use href="#i-seed"/></svg></span>Pumpkin seeds</span>
+          <span class="food-chip"><span class="food-icon-wrap"><svg><use href="#i-nut"/></svg></span>Cashews</span>
+          <span class="food-chip"><span class="food-icon-wrap"><svg><use href="#i-bowl"/></svg></span>Chickpeas</span>
+        </div>
+      </article>
+
+      <article class="n-card">
+        <div class="n-card-top">
+          <div class="n-icon"><svg><use href="#i-drop"/></svg></div>
+          <div><div class="n-name">Omega-3 &amp; Vitamin E</div><div class="n-tag">Barrier &amp; glow</div></div>
+        </div>
+        <p class="n-body">Omega-3 fats keep the skin's lipid barrier flexible and calm inflammation; vitamin E works alongside vitamin C as a fat-soluble antioxidant, protecting cell membranes from oxidative stress.</p>
+        <div class="food-row">
+          <span class="food-chip"><span class="food-icon-wrap"><svg><use href="#i-nut"/></svg></span>Walnuts &amp; flaxseed</span>
+          <span class="food-chip"><span class="food-icon-wrap"><svg><use href="#i-fish"/></svg></span>Salmon</span>
+          <span class="food-chip"><span class="food-icon-wrap"><svg><use href="#i-leaf"/></svg></span>Sunflower seeds</span>
+        </div>
+      </article>
+    </div>
+
+    <div class="synergy">
+      <span class="synergy-label">Why together</span>
+      <h3>You can't out-supplement a vitamin C gap</h3>
+      <p>Collagen supplements and bone broth supply the raw amino acids, but without enough vitamin C the enzymes that stitch them into a stable collagen fibre simply can't run at full speed. Pairing a vitamin-C food in the same meal — a squeeze of lemon, a side of amla — is what makes collagen intake count.</p>
+      <div class="synergy-chain">
+        <span class="node">Collagen peptides</span><span class="arrow">stabilized by</span>
+        <span class="node">Vitamin C</span><span class="arrow">protected by</span>
+        <span class="node">Vitamin E</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= MUSCLE / TENDON / LIGAMENT ================= -->
+<section class="chapter" id="muscle">
+  <div class="particle-field" aria-hidden="true">
+    <div class="p-layer" data-depth="0.2">
+      <span class="particle" style="width:5px;height:5px;left:10%;bottom:8%;--pmax:.5;--drift:16px;animation-duration:7s;animation-delay:0s;"></span>
+      <span class="particle" style="width:6px;height:6px;left:48%;bottom:4%;--pmax:.5;--drift:14px;animation-duration:8s;animation-delay:3s;"></span>
+      <span class="particle" style="width:7px;height:7px;left:84%;bottom:10%;--pmax:.5;--drift:12px;animation-duration:7.5s;animation-delay:4s;"></span>
+    </div>
+    <div class="p-layer" data-depth="0.5">
+      <span class="particle" style="width:4px;height:4px;left:28%;bottom:20%;--pmax:.6;--drift:-12px;animation-duration:6s;animation-delay:1.5s;"></span>
+      <span class="particle" style="width:5px;height:5px;left:66%;bottom:16%;--pmax:.6;--drift:-10px;animation-duration:6.5s;animation-delay:2s;"></span>
+      <span class="particle" style="width:4px;height:4px;left:95%;bottom:26%;--pmax:.55;--drift:-8px;animation-duration:6s;animation-delay:.8s;"></span>
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="chapter-top">
+      <div class="chapter-head">
+        <div class="chapter-tag"><span class="chapter-num">Chapter 03</span></div>
+        <h2 class="chapter-title">Muscle, Tendon &amp; Ligament</h2>
+        <p class="chapter-sub">Muscle needs a steady protein supply and minerals for every contraction. Tendons and ligaments are quieter tissue — mostly collagen again — that heal slowly and reward the same nutrients that build skin, plus a few of their own.</p>
+      </div>
+      <div class="chapter-visual photo"><img src="images/muscle-photo.webp" alt="Illustration of muscle and tendon fibre"></div>
+    </div>
+
+    <div class="nutrient-grid">
+      <article class="n-card">
+        <div class="n-card-top">
+          <div class="n-icon"><svg><use href="#i-flex"/></svg></div>
+          <div><div class="n-name">Complete Protein</div><div class="n-tag">The rebuild material</div></div>
+        </div>
+        <p class="n-body">Muscle fibres are in constant turnover — broken down and rebuilt daily. Protein spread across meals, with enough of the amino acid leucine, is what tips that balance toward growth and repair rather than net loss.</p>
+        <div class="food-row">
+          <span class="food-chip"><span class="food-icon-wrap"><svg><use href="#i-egg"/></svg></span>Eggs &amp; paneer</span>
+          <span class="food-chip"><span class="food-icon-wrap"><svg><use href="#i-bowl"/></svg></span>Lentils &amp; dal</span>
+          <span class="food-chip"><span class="food-icon-wrap"><svg><use href="#i-fish"/></svg></span>Fish &amp; chicken</span>
+          <span class="food-chip"><span class="food-icon-wrap"><svg><use href="#i-milk"/></svg></span>Greek yogurt</span>
+        </div>
+      </article>
+
+      <article class="n-card">
+        <div class="n-card-top">
+          <div class="n-icon"><svg><use href="#i-spark"/></svg></div>
+          <div><div class="n-name">Potassium &amp; Magnesium</div><div class="n-tag">Contraction &amp; cramp control</div></div>
+        </div>
+        <p class="n-body">Every muscle contraction and release runs on an electrical signal carried by potassium, magnesium, calcium and sodium moving across the cell membrane. Low potassium or magnesium is a classic, correctable cause of night cramps.</p>
+        <div class="food-row">
+          <span class="food-chip"><span class="food-icon-wrap"><svg><use href="#i-leaf"/></svg></span>Banana</span>
+          <span class="food-chip"><span class="food-icon-wrap"><svg><use href="#i-drop"/></svg></span>Coconut water</span>
+          <span class="food-chip"><span class="food-icon-wrap"><svg><use href="#i-root"/></svg></span>Sweet potato</span>
+        </div>
+      </article>
+
+      <article class="n-card">
+        <div class="n-card-top">
+          <div class="n-icon"><svg><use href="#i-thread"/></svg></div>
+          <div><div class="n-name">Vitamin C, Manganese &amp; Copper</div><div class="n-tag">Tendon &amp; ligament repair</div></div>
+        </div>
+        <p class="n-body">Tendons and ligaments are dense collagen with almost no blood supply, which is why they heal slowly. The same vitamin-C-dependent collagen synthesis applies here, plus manganese and copper — cofactors for the enzymes that cross-link collagen fibres into rope-like strength.</p>
+        <div class="food-row">
+          <span class="food-chip"><span class="food-icon-wrap"><svg><use href="#i-citrus"/></svg></span>Citrus &amp; amla</span>
+          <span class="food-chip"><span class="food-icon-wrap"><svg><use href="#i-grain"/></svg></span>Whole grains</span>
+          <span class="food-chip"><span class="food-icon-wrap"><svg><use href="#i-nut"/></svg></span>Cashews</span>
+          <span class="food-chip"><span class="food-icon-wrap"><svg><use href="#i-mush"/></svg></span>Shiitake</span>
+        </div>
+      </article>
+
+      <article class="n-card">
+        <div class="n-card-top">
+          <div class="n-icon"><svg><use href="#i-bone"/></svg></div>
+          <div><div class="n-name">B6 &amp; B12</div><div class="n-tag">Nerve-to-muscle signal</div></div>
+        </div>
+        <p class="n-body">Muscles only move on instruction — B vitamins keep the nerves that fire them working properly, and support the energy metabolism that powers each contraction. B12 is worth watching closely on a vegetarian diet.</p>
+        <div class="food-row">
+          <span class="food-chip"><span class="food-icon-wrap"><svg><use href="#i-egg"/></svg></span>Eggs</span>
+          <span class="food-chip"><span class="food-icon-wrap"><svg><use href="#i-milk"/></svg></span>Dairy</span>
+          <span class="food-chip"><span class="food-icon-wrap"><svg><use href="#i-fish"/></svg></span>Fish</span>
+        </div>
+      </article>
+    </div>
+
+    <div class="synergy">
+      <span class="synergy-label">Why together</span>
+      <h3>Muscle moves fast, tendon heals slow</h3>
+      <p>Muscle rebuilds within days on enough protein and minerals — tendons and ligaments, being dense collagen with little blood flow, can take months. That's why an overuse injury there needs the same vitamin-C-and-collagen approach as skin, just with more patience.</p>
+      <div class="synergy-chain">
+        <span class="node">Protein</span><span class="arrow">powers</span>
+        <span class="node">Muscle</span><span class="arrow">pulls on</span>
+        <span class="node">Collagen tendon</span><span class="arrow">rebuilt via</span>
+        <span class="node">Vitamin C</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= HERBS / SLEEP ================= -->
+<section class="chapter" id="herbs">
+  <div class="particle-field" aria-hidden="true">
+    <div class="p-layer" data-depth="0.1">
+      <span class="particle" style="width:2px;height:2px;left:18%;top:30%;--pmax:.7;animation-duration:2.6s;animation-delay:.8s;"></span>
+      <span class="particle" style="width:2px;height:2px;left:45%;top:22%;--pmax:.65;animation-duration:2.9s;animation-delay:.4s;"></span>
+      <span class="particle" style="width:2px;height:2px;left:72%;top:34%;--pmax:.7;animation-duration:2.7s;animation-delay:1.1s;"></span>
+      <span class="particle" style="width:2px;height:2px;left:94%;top:26%;--pmax:.7;animation-duration:2.5s;animation-delay:1.9s;"></span>
+    </div>
+    <div class="p-layer" data-depth="0.3">
+      <span class="particle" style="width:3px;height:3px;left:6%;top:12%;--pmax:.9;animation-duration:3.2s;animation-delay:0s;"></span>
+      <span class="particle" style="width:4px;height:4px;left:30%;top:8%;--pmax:.9;animation-duration:3.6s;animation-delay:1.6s;"></span>
+      <span class="particle" style="width:3px;height:3px;left:60%;top:14%;--pmax:.85;animation-duration:3.1s;animation-delay:2.2s;"></span>
+      <span class="particle" style="width:4px;height:4px;left:85%;top:10%;--pmax:.9;animation-duration:3.4s;animation-delay:.2s;"></span>
+      <span class="particle" style="width:3px;height:3px;left:52%;top:5%;--pmax:.8;animation-duration:3s;animation-delay:2.6s;"></span>
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="chapter-top">
+      <div class="chapter-head">
+        <div class="chapter-tag"><span class="chapter-num">Chapter 04</span></div>
+        <h2 class="chapter-title">Roots &amp; Herbs for Sleep</h2>
+        <p class="chapter-sub">Alongside vitamins and minerals, Ayurvedic and herbal traditions lean on a handful of roots to quiet the nervous system before bed. Most are taken as a warm-milk decoction, tea, or standardized capsule roughly an hour before sleep.</p>
+      </div>
+      <div class="chapter-visual photo"><img class="cover" style="object-position:50% 32%" src="images/root-photo.jpg" alt="Photo of a dried medicinal root"></div>
+    </div>
+
+    <div class="herb-grid">
+      <article class="h-card">
+        <div class="h-top">
+          <div class="h-icon"><svg><use href="#i-root"/></svg></div>
+          <div><div class="h-name">Ashwagandha</div><div class="h-latin">Withania somnifera</div></div>
+        </div>
+        <p class="h-body">An adaptogen — it helps the body regulate its stress response rather than sedating directly. Used traditionally to lower cortisol, ease anxiety, and make it easier to wind down at night.</p>
+        <div class="h-tradition">Root · taken as churna or capsule</div>
+      </article>
+
+      <article class="h-card">
+        <div class="h-top">
+          <div class="h-icon"><svg><use href="#i-flower"/></svg></div>
+          <div><div class="h-name">Tagara (Indian Valerian)</div><div class="h-latin">Valeriana wallichii / jatamansi</div></div>
+        </div>
+        <p class="h-body">The Ayurvedic name for a native valerian species — a classic mild sedative root, used for restlessness and difficulty falling asleep, closely related to the valerian sold in the West.</p>
+        <div class="h-tradition">Root · tea or capsule, near bedtime</div>
+      </article>
+
+      <article class="h-card">
+        <div class="h-top">
+          <div class="h-icon"><svg><use href="#i-leaf"/></svg></div>
+          <div><div class="h-name">Brahmi</div><div class="h-latin">Bacopa monnieri</div></div>
+        </div>
+        <p class="h-body">A nervine tonic traditionally used to calm mental chatter and support memory. Often paired with ashwagandha in the evening for a quieter mind at lights-out.</p>
+        <div class="h-tradition">Leaf · ghrita, syrup or capsule</div>
+      </article>
+
+      <article class="h-card">
+        <div class="h-top">
+          <div class="h-icon"><svg><use href="#i-spark"/></svg></div>
+          <div><div class="h-name">Jatamansi</div><div class="h-latin">Nardostachys jatamansi</div></div>
+        </div>
+        <p class="h-body">A Himalayan spikenard root, one of Ayurveda's oldest calming herbs — used for sleep, tension headaches, and to settle an overstimulated mind.</p>
+        <div class="h-tradition">Root · warm milk decoction</div>
+      </article>
+
+      <article class="h-card">
+        <div class="h-top">
+          <div class="h-icon"><svg><use href="#i-flower"/></svg></div>
+          <div><div class="h-name">Shankhpushpi</div><div class="h-latin">Convolvulus pluricaulis</div></div>
+        </div>
+        <p class="h-body">A trailing herb used as a gentle nervine, traditionally taken to ease anxiety and support deeper, more settled sleep without next-day grogginess.</p>
+        <div class="h-tradition">Whole herb · syrup or tea</div>
+      </article>
+
+      <article class="h-card">
+        <div class="h-top">
+          <div class="h-icon"><svg><use href="#i-flower"/></svg></div>
+          <div><div class="h-name">Chamomile</div><div class="h-latin">Matricaria chamomilla</div></div>
+        </div>
+        <p class="h-body">A gentle flower tea containing apigenin, which binds to calming receptors in the brain — the most familiar bedtime herb worldwide, easy to weave into a nightly ritual.</p>
+        <div class="h-tradition">Flower · steeped as tea</div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FULL INDEX ================= -->
+<section class="chapter" id="index">
+  <div class="wrap">
+    <div class="chapter-head">
+      <div class="chapter-tag"><span class="chapter-num" style="color:var(--gold)">Chapter 05</span><span class="daypart">📖 Field Reference</span></div>
+      <h2 class="chapter-title">The Full Index</h2>
+      <p class="chapter-sub">Every vitamin and mineral, not just the ones covered above — a quick standalone reference for what each one does and where to find it.</p>
+    </div>
+
+    <p class="index-note">RDA figures are general benchmarks adapted from NIH/IOM Dietary Reference Intakes for the general population — "Teens" reflects ages 9–13, and "Adults" splits male/female where they differ meaningfully. Pregnancy needs shown are the biggest, most-asked jumps; a doctor can give a precise personal target, especially in pregnancy, illness, or on medication.</p>
+
+    <div class="index-group">
+      <h3>Vitamins</h3>
+      <div class="index-grid">
+        <div class="idx-card"><div class="idx-head"><span class="idx-name">Vitamin A</span><span class="idx-code">A</span></div><div class="idx-alt">Retinol / Beta-carotene</div><p class="idx-note">Supports vision in low light, immune defence, and healthy skin cell turnover.</p><div class="idx-sources">liver · carrot · sweet potato · spinach</div><div class="idx-rda"><span><b>4–8y</b>400mcg</span><span><b>9–18y</b>600mcg</span><span><b>Adult</b>900/700mcg</span><span><b>51+</b>900/700mcg</span></div><div class="idx-preg">Pregnancy ~770mcg · Lactation ~1300mcg</div></div>
+        <div class="idx-card"><div class="idx-head"><span class="idx-name">Vitamin B1</span><span class="idx-code">B1</span></div><div class="idx-alt">Thiamine</div><p class="idx-note">Converts carbohydrates into usable energy and keeps nerve signalling on track.</p><div class="idx-sources">whole grains · lentils · sunflower seeds</div><div class="idx-rda"><span><b>4–8y</b>0.6mg</span><span><b>9–18y</b>0.9mg</span><span><b>Adult</b>1.2/1.1mg</span><span><b>51+</b>1.2/1.1mg</span></div></div>
+        <div class="idx-card"><div class="idx-head"><span class="idx-name">Vitamin B2</span><span class="idx-code">B2</span></div><div class="idx-alt">Riboflavin</div><p class="idx-note">Powers cellular energy production and helps recycle other antioxidants.</p><div class="idx-sources">milk · eggs · almonds · mushroom</div><div class="idx-rda"><span><b>4–8y</b>0.6mg</span><span><b>9–18y</b>0.9mg</span><span><b>Adult</b>1.3/1.1mg</span><span><b>51+</b>1.3/1.1mg</span></div></div>
+        <div class="idx-card"><div class="idx-head"><span class="idx-name">Vitamin B3</span><span class="idx-code">B3</span></div><div class="idx-alt">Niacin</div><p class="idx-note">Supports energy metabolism, skin health, and everyday DNA repair.</p><div class="idx-sources">peanuts · chicken · brown rice</div><div class="idx-rda"><span><b>4–8y</b>8mg</span><span><b>9–18y</b>12mg</span><span><b>Adult</b>16/14mg</span><span><b>51+</b>16/14mg</span></div></div>
+        <div class="idx-card"><div class="idx-head"><span class="idx-name">Vitamin B5</span><span class="idx-code">B5</span></div><div class="idx-alt">Pantothenic acid</div><p class="idx-note">Builds coenzyme A — essential for making hormones and metabolising fat.</p><div class="idx-sources">eggs · avocado · mushroom</div><div class="idx-rda"><span><b>4–8y</b>3mg</span><span><b>9–18y</b>4mg</span><span><b>Adult</b>5mg</span><span><b>51+</b>5mg</span></div></div>
+        <div class="idx-card"><div class="idx-head"><span class="idx-name">Vitamin B6</span><span class="idx-code">B6</span></div><div class="idx-alt">Pyridoxine</div><p class="idx-note">Helps build neurotransmitters and metabolise protein.</p><div class="idx-sources">chickpeas · banana · poultry</div><div class="idx-rda"><span><b>4–8y</b>0.6mg</span><span><b>9–18y</b>1.0mg</span><span><b>Adult</b>1.3mg</span><span><b>51+</b>1.7/1.5mg</span></div><div class="idx-preg">Pregnancy ~1.9mg</div></div>
+        <div class="idx-card"><div class="idx-head"><span class="idx-name">Vitamin B7</span><span class="idx-code">B7</span></div><div class="idx-alt">Biotin</div><p class="idx-note">Supports fat and carb metabolism — the classic "hair, skin, nails" vitamin.</p><div class="idx-sources">eggs · nuts · sweet potato</div><div class="idx-rda"><span><b>4–8y</b>12mcg</span><span><b>9–18y</b>20mcg</span><span><b>Adult</b>30mcg</span><span><b>51+</b>30mcg</span></div></div>
+        <div class="idx-card"><div class="idx-head"><span class="idx-name">Vitamin B9</span><span class="idx-code">B9</span></div><div class="idx-alt">Folate</div><p class="idx-note">Drives DNA synthesis and cell division — critical before and during pregnancy.</p><div class="idx-sources">leafy greens · lentils · citrus</div><div class="idx-rda"><span><b>4–8y</b>200mcg</span><span><b>9–18y</b>300mcg</span><span><b>Adult</b>400mcg</span><span><b>51+</b>400mcg</span></div><div class="idx-preg">Pregnancy ~600mcg</div></div>
+        <div class="idx-card"><div class="idx-head"><span class="idx-name">Vitamin B12</span><span class="idx-code">B12</span></div><div class="idx-alt">Cobalamin</div><p class="idx-note">Needed for nerve function and red blood cell formation — watch closely on a vegetarian diet.</p><div class="idx-sources">eggs · dairy · fish</div><div class="idx-rda"><span><b>4–8y</b>1.2mcg</span><span><b>9–18y</b>1.8mcg</span><span><b>Adult</b>2.4mcg</span><span><b>51+</b>2.4mcg</span></div><div class="idx-preg">Pregnancy ~2.6mcg</div></div>
+        <div class="idx-card"><div class="idx-head"><span class="idx-name">Vitamin C</span><span class="idx-code">C</span></div><div class="idx-alt">Ascorbic acid</div><p class="idx-note">Builds collagen, supports immunity, and helps the gut absorb plant-based iron.</p><div class="idx-sources">amla · citrus · bell pepper</div><div class="idx-rda"><span><b>4–8y</b>25mg</span><span><b>9–18y</b>45mg</span><span><b>Adult</b>90/75mg</span><span><b>51+</b>90/75mg</span></div><div class="idx-preg">Pregnancy ~85mg</div></div>
+        <div class="idx-card"><div class="idx-head"><span class="idx-name">Vitamin D</span><span class="idx-code">D2/D3</span></div><div class="idx-alt">Calciferol</div><p class="idx-note">Opens the gut door for calcium absorption and helps balance immune response.</p><div class="idx-sources">sunlight · fatty fish · egg yolk</div><div class="idx-rda"><span><b>4–8y</b>15mcg (600IU)</span><span><b>9–18y</b>15mcg (600IU)</span><span><b>Adult</b>15mcg (600IU)</span><span><b>51+</b>20mcg (800IU)</span></div></div>
+        <div class="idx-card"><div class="idx-head"><span class="idx-name">Vitamin E</span><span class="idx-code">E</span></div><div class="idx-alt">Tocopherol</div><p class="idx-note">A fat-soluble antioxidant that protects cell membranes, skin included.</p><div class="idx-sources">sunflower seeds · almonds · avocado</div><div class="idx-rda"><span><b>4–8y</b>7mg</span><span><b>9–18y</b>11mg</span><span><b>Adult</b>15mg</span><span><b>51+</b>15mg</span></div></div>
+        <div class="idx-card"><div class="idx-head"><span class="idx-name">Vitamin K</span><span class="idx-code">K1/K2</span></div><div class="idx-alt">Phylloquinone / Menaquinone</div><p class="idx-note">K1 supports blood clotting; K2 directs calcium into bone rather than arteries.</p><div class="idx-sources">leafy greens · egg yolk · hard cheese</div><div class="idx-rda"><span><b>4–8y</b>55mcg</span><span><b>9–18y</b>60mcg</span><span><b>Adult</b>120/90mcg</span><span><b>51+</b>120/90mcg</span></div></div>
+      </div>
+    </div>
+
+    <div class="index-group">
+      <h3>Minerals</h3>
+      <div class="index-grid">
+        <div class="idx-card"><div class="idx-head"><span class="idx-name">Calcium</span><span class="idx-code">Ca</span></div><p class="idx-note">The mineral bones and teeth are built from; also needed for muscle and nerve signalling.</p><div class="idx-sources">dairy · sesame · leafy greens</div><div class="idx-rda"><span><b>4–8y</b>1000mg</span><span><b>9–18y</b>1300mg</span><span><b>Adult</b>1000mg</span><span><b>51+</b>1000/1200mg</span></div></div>
+        <div class="idx-card"><div class="idx-head"><span class="idx-name">Magnesium</span><span class="idx-code">Mg</span></div><p class="idx-note">Runs 300+ enzyme reactions, including energy production and muscle relaxation.</p><div class="idx-sources">pumpkin seeds · spinach · almonds</div><div class="idx-rda"><span><b>4–8y</b>130mg</span><span><b>9–18y</b>240mg</span><span><b>Adult</b>400/310mg</span><span><b>51+</b>420/320mg</span></div></div>
+        <div class="idx-card"><div class="idx-head"><span class="idx-name">Phosphorus</span><span class="idx-code">P</span></div><p class="idx-note">Pairs with calcium in bone structure and forms part of the body's energy currency, ATP.</p><div class="idx-sources">dairy · lentils · nuts</div><div class="idx-rda"><span><b>4–8y</b>500mg</span><span><b>9–18y</b>1250mg</span><span><b>Adult</b>700mg</span><span><b>51+</b>700mg</span></div></div>
+        <div class="idx-card"><div class="idx-head"><span class="idx-name">Potassium</span><span class="idx-code">K</span></div><p class="idx-note">Balances fluid levels and fires the electrical signal behind every muscle contraction.</p><div class="idx-sources">banana · coconut water · potato</div><div class="idx-rda"><span><b>4–8y</b>2300mg</span><span><b>9–18y</b>2500mg</span><span><b>Adult</b>3400/2600mg</span><span><b>51+</b>3400/2600mg</span></div></div>
+        <div class="idx-card"><div class="idx-head"><span class="idx-name">Sodium</span><span class="idx-code">Na</span></div><p class="idx-note">Regulates fluid balance and nerve transmission — this is a floor most diets already clear, not a target to chase.</p><div class="idx-sources">salt · pickles · papad</div><div class="idx-rda"><span><b>4–8y</b>1000mg</span><span><b>9–18y</b>1200mg</span><span><b>Adult</b>1500mg</span><span><b>51+</b>1500mg</span></div></div>
+        <div class="idx-card"><div class="idx-head"><span class="idx-name">Iron</span><span class="idx-code">Fe</span></div><p class="idx-note">Carries oxygen in the blood via haemoglobin; low levels show up as fatigue fast.</p><div class="idx-sources">spinach · lentils · red meat</div><div class="idx-rda"><span><b>4–8y</b>10mg</span><span><b>9–18y</b>8mg</span><span><b>Adult</b>8/18mg</span><span><b>51+</b>8mg</span></div><div class="idx-preg">Pregnancy ~27mg</div></div>
+        <div class="idx-card"><div class="idx-head"><span class="idx-name">Zinc</span><span class="idx-code">Zn</span></div><p class="idx-note">Supports immune defence, wound healing, and skin oil regulation.</p><div class="idx-sources">pumpkin seeds · cashews · chickpeas</div><div class="idx-rda"><span><b>4–8y</b>5mg</span><span><b>9–18y</b>8mg</span><span><b>Adult</b>11/8mg</span><span><b>51+</b>11/8mg</span></div><div class="idx-preg">Pregnancy ~11mg</div></div>
+        <div class="idx-card"><div class="idx-head"><span class="idx-name">Iodine</span><span class="idx-code">I</span></div><p class="idx-note">The raw material for thyroid hormone, which sets the body's metabolic pace.</p><div class="idx-sources">iodised salt · dairy · seafood</div><div class="idx-rda"><span><b>4–8y</b>90mcg</span><span><b>9–18y</b>120mcg</span><span><b>Adult</b>150mcg</span><span><b>51+</b>150mcg</span></div><div class="idx-preg">Pregnancy ~220mcg</div></div>
+        <div class="idx-card"><div class="idx-head"><span class="idx-name">Selenium</span><span class="idx-code">Se</span></div><p class="idx-note">An antioxidant mineral that also supports thyroid hormone conversion.</p><div class="idx-sources">brazil nuts · eggs · sunflower seeds</div><div class="idx-rda"><span><b>4–8y</b>30mcg</span><span><b>9–18y</b>40mcg</span><span><b>Adult</b>55mcg</span><span><b>51+</b>55mcg</span></div></div>
+        <div class="idx-card"><div class="idx-head"><span class="idx-name">Copper</span><span class="idx-code">Cu</span></div><p class="idx-note">Works with iron to form red blood cells and helps cross-link collagen in connective tissue.</p><div class="idx-sources">cashews · sesame seeds · shiitake</div><div class="idx-rda"><span><b>4–8y</b>440mcg</span><span><b>9–18y</b>700mcg</span><span><b>Adult</b>900mcg</span><span><b>51+</b>900mcg</span></div></div>
+        <div class="idx-card"><div class="idx-head"><span class="idx-name">Manganese</span><span class="idx-code">Mn</span></div><p class="idx-note">A cofactor for bone-building and antioxidant enzymes.</p><div class="idx-sources">whole grains · pineapple · nuts</div><div class="idx-rda"><span><b>4–8y</b>1.5mg</span><span><b>9–18y</b>1.9mg</span><span><b>Adult</b>2.3/1.8mg</span><span><b>51+</b>2.3/1.8mg</span></div></div>
+        <div class="idx-card"><div class="idx-head"><span class="idx-name">Chromium</span><span class="idx-code">Cr</span></div><p class="idx-note">Supports insulin's action in regulating blood sugar.</p><div class="idx-sources">broccoli · whole grains · potato</div><div class="idx-rda"><span><b>4–8y</b>15mcg</span><span><b>9–18y</b>24mcg</span><span><b>Adult</b>35/25mcg</span><span><b>51+</b>30/20mcg</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap foot-inner">
+    <div class="foot-brand">The Nutrient Atlas</div>
+    <p class="disclaimer">Educational reference only — not medical advice. Herbs and supplements can interact with medications and health conditions; check with a doctor before starting anything new, especially during pregnancy, breastfeeding, or alongside prescription medication.</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  // scroll progress bar
+  var progress = document.getElementById('progress');
+  function updateProgress(){
+    var h = document.documentElement;
+    var scrolled = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+    if(progress) progress.style.width = (scrolled||0) + '%';
+  }
+  document.addEventListener('scroll', updateProgress, {passive:true});
+  updateProgress();
+
+  // nav active state
+  var navLinks = Array.prototype.slice.call(document.querySelectorAll('[data-nav]'));
+  var sections = navLinks.map(function(l){ return document.querySelector(l.getAttribute('href')); }).filter(Boolean);
+  function updateActive(){
+    var pos = window.scrollY + 140;
+    var current = sections[0];
+    sections.forEach(function(s){ if(s.offsetTop <= pos) current = s; });
+    navLinks.forEach(function(l){
+      l.classList.toggle('active', current && l.getAttribute('href') === '#' + current.id);
+    });
+  }
+  document.addEventListener('scroll', updateActive, {passive:true});
+  updateActive();
+
+  // reveal on scroll
+  var reveal = document.querySelectorAll('.n-card, .h-card, .idx-card, .chapter-head');
+  if('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){ e.target.classList.add('in-view'); io.unobserve(e.target); }
+      });
+    }, {threshold:0.15});
+    reveal.forEach(function(el){ io.observe(el); });
+  } else {
+    reveal.forEach(function(el){ el.classList.add('in-view'); });
+  }
+
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  (function(){
+    // hero spotlight + gentle blob parallax on mouse move (skipped under reduced motion)
+    var hero = document.getElementById('hero');
+    var spotlight = document.getElementById('spotlight');
+    var blob1 = document.getElementById('blob1');
+    var blob2 = document.getElementById('blob2');
+    var blob3 = document.getElementById('blob3');
+    if(!reduceMotion && hero && spotlight){
+      hero.addEventListener('mousemove', function(e){
+        var r = hero.getBoundingClientRect();
+        var x = ((e.clientX - r.left) / r.width) * 100;
+        var y = ((e.clientY - r.top) / r.height) * 100;
+        spotlight.style.setProperty('--sx', x + '%');
+        spotlight.style.setProperty('--sy', y + '%');
+        var dx = (x - 50) / 50, dy = (y - 50) / 50;
+        if(blob1) blob1.style.transform = 'translate(' + (dx * -14) + 'px,' + (dy * -10) + 'px)';
+        if(blob2) blob2.style.transform = 'translate(' + (dx * 12) + 'px,' + (dy * 10) + 'px)';
+        if(blob3) blob3.style.transform = 'translate(' + (dx * -8) + 'px,' + (dy * 8) + 'px)';
+      }, {passive:true});
+    }
+
+    // gentle parallax drift on chapter illustrations as they scroll through view
+    // (skipped under reduced motion — images stay put)
+    var visuals = document.querySelectorAll('.chapter-visual');
+    function updateVisualParallax(){
+      if(reduceMotion) return;
+      var vh = window.innerHeight;
+      visuals.forEach(function(el){
+        var r = el.getBoundingClientRect();
+        var center = r.top + r.height / 2;
+        var offset = (center - vh / 2) / vh; // -0.5..0.5 roughly
+        el.style.transform = 'translateY(' + (offset * -26) + 'px)';
+      });
+    }
+
+    // ---- continuous day-cycle background blend + travelling sun ----
+    // (this runs regardless of reduced-motion: it's a scroll-linked colour/position
+    // readout, not a self-playing animation — ambient drift loops are handled by CSS)
+    var bonesEl = document.getElementById('bones');
+    var skinEl = document.getElementById('skin');
+    var muscleEl = document.getElementById('muscle');
+    var herbsEl = document.getElementById('herbs');
+    var sunOrb = document.getElementById('sunOrb');
+
+    function absTop(el){ return el.getBoundingClientRect().top + window.scrollY; }
+    function lerp(a, b, t){ return a + (b - a) * t; }
+    function lerpColor(c1, c2, t){
+      return [
+        Math.round(lerp(c1[0], c2[0], t)),
+        Math.round(lerp(c1[1], c2[1], t)),
+        Math.round(lerp(c1[2], c2[2], t))
+      ];
+    }
+    function colorAt(stops, y){
+      if(y <= stops[0].y) return stops[0].c;
+      for(var i = 0; i < stops.length - 1; i++){
+        var a = stops[i], b = stops[i+1];
+        if(y >= a.y && y <= b.y){
+          var t = b.y === a.y ? 0 : (y - a.y) / (b.y - a.y);
+          return lerpColor(a.c, b.c, t);
+        }
+      }
+      return stops[stops.length - 1].c;
+    }
+
+    function updateDayCycle(){
+      if(!bonesEl || !skinEl || !muscleEl || !herbsEl) return;
+      var bonesTop = absTop(bonesEl), bonesH = bonesEl.offsetHeight;
+      var skinTop = absTop(skinEl), skinH = skinEl.offsetHeight;
+      var muscleTop = absTop(muscleEl), muscleH = muscleEl.offsetHeight;
+      var herbsTop = absTop(herbsEl), herbsH = herbsEl.offsetHeight;
+      var muscleBottom = muscleTop + muscleH;
+      var herbsBottom = herbsTop + herbsH;
+
+      var stops = [
+        {y: bonesTop, c:[247,220,226]},
+        {y: bonesTop + 0.55*bonesH, c:[251,228,185]},
+        {y: bonesTop + bonesH, c:[246,206,147]},
+        {y: skinTop, c:[234,244,238]},
+        {y: skinTop + 0.55*skinH, c:[248,241,218]},
+        {y: skinTop + skinH, c:[252,230,211]},
+        {y: muscleTop, c:[246,210,168]},
+        {y: muscleTop + 0.55*muscleH, c:[232,152,95]},
+        {y: muscleBottom, c:[214,125,92]},
+        {y: herbsTop, c:[36,26,52]},
+        {y: herbsBottom, c:[51,35,70]}
+      ];
+
+      var sampleY = window.scrollY + window.innerHeight * 0.35;
+
+      if(sampleY < bonesTop || sampleY > herbsBottom){
+        document.body.style.removeProperty('background');
+      } else {
+        var c = colorAt(stops, sampleY);
+        document.body.style.background = 'rgb(' + c[0] + ',' + c[1] + ',' + c[2] + ')';
+      }
+
+      if(sunOrb){
+        if(sampleY < bonesTop || sampleY > muscleBottom){
+          sunOrb.style.opacity = 0;
+        } else {
+          var p = (sampleY - bonesTop) / (muscleBottom - bonesTop);
+          var fade = p > 0.88 ? Math.max(0, 1 - (p - 0.88) / 0.12) : (p < 0.04 ? p / 0.04 : 1);
+          sunOrb.style.opacity = fade;
+          sunOrb.style.left = (5 + p * 90) + '%';
+          sunOrb.style.top = (68 - 52 * Math.sin(p * Math.PI)) + '%';
+        }
+      }
+    }
+
+    // ---- glowing synergy chains, lighting up node by node while scrolling ----
+    var chains = Array.prototype.slice.call(document.querySelectorAll('.synergy-chain'));
+    var chainData = chains.map(function(chain){
+      return { el: chain, nodes: Array.prototype.slice.call(chain.querySelectorAll('.node')) };
+    });
+    function updateChains(){
+      var centerY = window.innerHeight * 0.62;
+      chainData.forEach(function(cd){
+        var r = cd.el.getBoundingClientRect();
+        var progress = (centerY - r.top) / Math.max(r.height, 1);
+        progress = Math.max(0, Math.min(1, progress));
+        var lit = Math.round(progress * cd.nodes.length);
+        cd.nodes.forEach(function(node, i){
+          node.classList.toggle('lit', i < lit);
+        });
+      });
+    }
+
+    // ---- two-depth parallax on ambient particle layers ----
+    var layers = Array.prototype.slice.call(document.querySelectorAll('.p-layer'));
+    function updateParticleLayers(){
+      if(reduceMotion) return;
+      var vh = window.innerHeight;
+      layers.forEach(function(layer){
+        var field = layer.parentElement;
+        var r = field.getBoundingClientRect();
+        var progress = (vh - r.top) / (vh + r.height); // 0 entering .. 1 exited
+        var depth = parseFloat(layer.getAttribute('data-depth')) || 0.2;
+        layer.style.transform = 'translateY(' + ((progress - 0.5) * -160 * depth) + 'px)';
+      });
+    }
+
+    var ticking = false;
+    function onScroll(){
+      updateVisualParallax();
+      updateDayCycle();
+      updateChains();
+      updateParticleLayers();
+      ticking = false;
+    }
+    document.addEventListener('scroll', function(){
+      if(!ticking){ window.requestAnimationFrame(onScroll); ticking = true; }
+    }, {passive:true});
+    window.addEventListener('resize', onScroll, {passive:true});
+    onScroll();
+  })();
+
+  // Register the service worker when this page is served over a real
+  // origin that supports it (a plain claude.ai preview or a file:// open
+  // won't, and that's fine — the page still works, just without the
+  // offline/installable extras).
+  if('serviceWorker' in navigator){
+    window.addEventListener('load', function(){
+      navigator.serviceWorker.register('service-worker.js').catch(function(){ /* no-op */ });
+    });
+  }
+})();
+</script>
